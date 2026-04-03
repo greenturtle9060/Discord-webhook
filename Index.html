@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Sender</title>
+<style>
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+input, textarea, button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  background: #5865F2;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h3>Discord Webhook Sender</h3>
+
+  <input type="text" id="webhook" placeholder="Webhook URL">
+  <textarea id="message" placeholder="Message"></textarea>
+  <input type="file" id="file">
+
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+async function send() {
+  const webhook = document.getElementById("webhook").value;
+  const message = document.getElementById("message").value;
+  const fileInput = document.getElementById("file");
+
+  if (!webhook) {
+    alert("Enter webhook URL");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("content", message);
+
+  if (fileInput.files.length > 0) {
+    formData.append("file", fileInput.files[0]);
+  }
+
+  try {
+    await fetch(webhook, {
+      method: "POST",
+      body: formData
+    });
+
+    alert("Sent!");
+  } catch (err) {
+    alert("Error sending message");
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>
